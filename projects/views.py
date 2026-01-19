@@ -101,11 +101,10 @@ def create_tarea(request, proyecto_pk, hito_pk):
     proyecto = get_object_or_404(Proyecto, pk=proyecto_pk)
     hito = get_object_or_404(Hito, pk=hito_pk, proyecto=proyecto)
     if request.method == "POST":
-        form = TareaForm(request.POST)
+        # Bind the hito in the instance so model validation can enforce date ranges
+        form = TareaForm(request.POST, instance=Tarea(hito=hito))
         if form.is_valid():
-            tarea = form.save(commit=False)
-            tarea.hito = hito
-            tarea.save()
+            form.save()
             return redirect("proyecto_detail", pk=proyecto.pk)
     return redirect("proyecto_detail", pk=proyecto.pk)
 
