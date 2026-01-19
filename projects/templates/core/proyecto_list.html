@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %} 
+{% block title %}Listado de Proyectos {% endblock %} {% block content %}
+<div class="container">
+  <div class="card">
+    <h1>Proyectos</h1>
+    <a class="btn" href="{% url 'proyecto_create' %}">Nuevo proyecto</a>
+    <ul class="list" style="margin-top: 16px">
+      {% for p in proyectos %}
+      <li>
+        <a href="{% url 'proyecto_detail' p.id %}">
+          <strong>{{ p.nombre }}</strong>
+          <span style="color: var(--color-muted)">
+            ({{ p.fecha_inicio }} - {{ p.fecha_termino }})
+          </span>
+        </a>
+      </li>
+      {% empty %}
+      <li>No hay proyectos</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

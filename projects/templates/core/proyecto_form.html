@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %} {% block title %}{% if proyecto %}
+Editar Proyecto
+{% else %}
+Crear Proyecto
+{% endif %}
+{% endblock %} {%block content %}
+<div class="container">
+  <div class="card">
+    <h1>{% if proyecto %}Editar Proyecto{% else %}Crear Proyecto{% endif %}</h1>
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <div style="display: flex; gap: 8px">
+        <button type="submit" class="btn">Guardar</button>
+        {% if proyecto %}
+        <a class="btn btn-ghost" href="{% url 'proyecto_detail' proyecto.pk %}"
+          >Cancelar</a
+        >
+        {% else %}
+        <a class="btn btn-ghost" href="{% url 'proyecto_list' %}">Cancelar</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,288 @@
+{% extends 'core/base.html' %} {% block title %}{{ proyecto.nombre }}
+{%endblock%} {% block content %}
+<div class="container">
+  <div class="card">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      "
+    >
+      <a href="{% url 'proyecto_list' %}" style="display: inline-block"
+        >&larr; Volver</a
+      >
+      <a class="btn" href="{% url 'proyecto_edit' proyecto.pk %}"
+        >Editar Proyecto</a
+      >
+    </div>
+    <h1>{{ proyecto.nombre }}</h1>
+    <p style="color: var(--color-muted); margin-bottom: 20px">
+      {{ proyecto.descripcion }}
+    </p>
+    <div style="display: grid; gap: 12px; margin-bottom: 30px">
+      <div><strong>Inicio:</strong> {{ proyecto.fecha_inicio }}</div>
+      <div><strong>Término:</strong> {{ proyecto.fecha_termino }}</div>
+      {% if proyecto.jefe_proyecto %}
+      <div>
+        <strong>Jefe de Proyecto:</strong>
+        {{proyecto.jefe_proyecto.get_full_name|default:proyecto.jefe_proyecto.username}}
+      </div>
+      {% endif %}
+      <div>
+        <strong>Participantes:</strong> {{ proyecto.participantes.count }}
+      </div>
+    </div>
+
+    <!-- Hitos Section -->
+    <div style="border-top: 1px solid var(--color-border); padding-top: 24px">
+      <h2 style="margin-bottom: 20px">Hitos</h2>
+
+      {% if hitos %} {% for hito in hitos %}
+      <div
+        style="
+          background: #f9fafb;
+          border: 1px solid var(--color-border);
+          border-radius: 8px;
+          padding: 16px;
+          margin-bottom: 16px;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+          "
+        >
+          <div>
+            <h3>{{ hito.nombre }}</h3>
+            <p style="color: var(--color-muted); margin: 8px 0">
+              {{ hito.descripcion }}
+            </p>
+            <div
+              style="
+                display: grid;
+                gap: 8px;
+                margin: 12px 0;
+                font-size: 0.9rem;
+                color: var(--color-muted);
+              "
+            >
+              <div><strong>Inicio:</strong> {{ hito.fecha_inicio }}</div>
+              <div><strong>Término:</strong> {{ hito.fecha_termino }}</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px">
+            <a
+              class="btn btn-ghost"
+              href="{% url 'edit_hito' proyecto.pk hito.pk %}"
+              style="padding: 6px 12px; font-size: 0.85rem"
+              >Editar</a
+            >
+            <a
+              class="btn btn-ghost"
+              href="{% url 'delete_hito' proyecto.pk hito.pk %}"
+              style="
+                padding: 6px 12px;
+                font-size: 0.85rem;
+                color: #dc2626;
+                border-color: #fecaca;
+              "
+              >Eliminar</a
+            >
+          </div>
+        </div>
+
+        <!-- Tareas Section -->
+        <div
+          style="
+            margin-top: 16px;
+            padding-left: 12px;
+            border-left: 3px solid var(--color-primary);
+          "
+        >
+          <h4 style="margin-bottom: 12px">Tareas</h4>
+          {% if hito.tareas.all %} {% for tarea in hito.tareas.all %}
+          <div
+            style="
+              background: #fff;
+              border: 1px solid var(--color-border);
+              border-radius: 6px;
+              padding: 12px;
+              margin-bottom: 12px;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: start;
+              "
+            >
+              <div style="flex: 1">
+                <strong>{{ tarea.titulo }}</strong>
+                <p
+                  style="
+                    color: var(--color-muted);
+                    font-size: 0.9rem;
+                    margin: 4px 0;
+                  "
+                >
+                  {{ tarea.descripcion }}
+                </p>
+                <div
+                  style="
+                    font-size: 0.85rem;
+                    color: var(--color-muted);
+                    margin: 8px 0;
+                  "
+                >
+                  <div>
+                    <strong>Responsable:</strong>
+                    {{tarea.responsable.get_full_name|default:tarea.responsable.username}}
+                  </div>
+                  <div>
+                    <strong>Inicio:</strong> {{ tarea.fecha_inicio }} |
+                    <strong>Término:</strong> {{ tarea.fecha_termino }}
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px">
+                <a
+                  class="btn btn-ghost"
+                  href="{% url 'edit_tarea' proyecto.pk hito.pk tarea.pk %}"
+                  style="padding: 6px 12px; font-size: 0.85rem"
+                  >Editar</a
+                >
+                <a
+                  class="btn btn-ghost"
+                  href="{% url 'delete_tarea' proyecto.pk hito.pk tarea.pk %}"
+                  style="
+                    padding: 6px 12px;
+                    font-size: 0.85rem;
+                    color: #dc2626;
+                    border-color: #fecaca;
+                  "
+                  >Eliminar</a
+                >
+              </div>
+            </div>
+
+            <!-- Subtareas Section -->
+            <div
+              style="
+                margin-top: 12px;
+                padding-top: 12px;
+                border-top: 1px solid var(--color-border);
+              "
+            >
+              <h5 style="margin-bottom: 8px">Subtareas</h5>
+              {% if tarea.subtareas.all %}
+              <ul style="list-style: none; padding: 0; margin-bottom: 8px">
+                {% for subtarea in tarea.subtareas.all %}
+                <li
+                  style="
+                    padding: 4px 0;
+                    color: var(--color-muted);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  "
+                >
+                  <span>
+                    <form method="post" action="{% url 'toggle_subtarea' proyecto.pk hito.pk tarea.pk subtarea.pk %}" style="display: inline;">
+                      {% csrf_token %}
+                      <button type="submit" style="background: none; border: none; cursor: pointer; padding: 0; margin-right: 4px;">
+                        <input type="checkbox" {%if subtarea.completada%}checked{%endif%} style="cursor: pointer;" onclick="this.form.submit();" />
+                      </button>
+                    </form>
+                    <span style="text-decoration: {% if subtarea.completada %}line-through{% endif %};">{{ subtarea.texto }}</span>
+                  </span>
+                  <div style="display: flex; gap: 6px">
+                    <a
+                      class="btn btn-ghost"
+                      href="{% url 'edit_subtarea' proyecto.pk hito.pk tarea.pk subtarea.pk %}"
+                      style="padding: 4px 8px; font-size: 0.8rem"
+                      >E</a
+                    >
+                    <a
+                      class="btn btn-ghost"
+                      href="{% url 'delete_subtarea' proyecto.pk hito.pk tarea.pk subtarea.pk %}"
+                      style="
+                        padding: 4px 8px;
+                        font-size: 0.8rem;
+                        color: #dc2626;
+                        border-color: #fecaca;
+                      "
+                      >X</a
+                    >
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+              <form
+                method="post"
+                action="{% url 'create_subtarea' proyecto.pk hito.pk tarea.pk %}"
+                style="display: inline"
+              >
+                {% csrf_token %}
+                <input
+                  type="text"
+                  name="texto"
+                  placeholder="Nueva subtarea..."
+                  style="
+                    padding: 6px 8px;
+                    border: 1px solid var(--color-border);
+                    border-radius: 4px;
+                    font-size: 0.9rem;
+                    width: 250px;
+                    max-width: 100%;
+                  "
+                  required
+                />
+                <button
+                  type="submit"
+                  class="btn"
+                  style="padding: 6px 12px; font-size: 0.9rem"
+                >
+                  +
+                </button>
+              </form>
+            </div>
+          </div>
+          {% endfor %} {% endif %}
+          <form
+            method="post"
+            action="{% url 'create_tarea' proyecto.pk hito.pk %}"
+            style="margin-top: 12px"
+          >
+            {% csrf_token %} {{ tarea_form.as_p }}
+            <button type="submit" class="btn">Agregar Tarea</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %} {% endif %}
+
+      <div
+        style="
+          margin-top: 20px;
+          padding: 16px;
+          background: #f9fafb;
+          border: 1px dashed var(--color-border);
+          border-radius: 8px;
+        "
+      >
+        <h4 style="margin-bottom: 12px">Nuevo Hito</h4>
+        <form method="post" action="{% url 'create_hito' proyecto.pk %}">
+          {% csrf_token %} {{ hito_form.as_p }}
+          <button type="submit" class="btn">Crear Hito</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

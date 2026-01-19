@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %} {% block title %}
+Confirmar Eliminación{% endblock%} {% block content %}
+<div class="container">
+  <div class="card">
+    <h1>Confirmar Eliminación</h1>
+    <p style="color: var(--color-muted); margin: 20px 0">
+      ¿Estás seguro de que deseas eliminar este {{ type }}?
+    </p>
+    <div
+      style="
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 20px;
+      "
+    >
+      <strong>{{ object }}</strong>
+    </div>
+    <form method="post" style="display: inline">
+      {% csrf_token %}
+      <button type="submit" class="btn" style="background: #dc2626">
+        Sí, eliminar
+      </button>
+    </form>
+    <a class="btn btn-ghost" href="javascript:history.back()">Cancelar</a>
+  </div>
+</div>
+{% endblock %}

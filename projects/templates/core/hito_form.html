@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %} {% block title %}Editar Hito{% endblock %} 
+{%block content %}
+<div class="container">
+  <div class="card">
+    <a
+      href="{% url 'proyecto_detail' proyecto.pk %}"
+      style="margin-bottom: 16px; display: inline-block"
+      >&larr; Volver</a
+    >
+    <h1>Editar Hito</h1>
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <div style="display: flex; gap: 8px">
+        <button type="submit" class="btn">Guardar</button>
+        <a class="btn btn-ghost" href="{% url 'proyecto_detail' proyecto.pk %}"
+          >Cancelar</a
+        >
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

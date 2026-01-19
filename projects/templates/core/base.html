@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Aplicación{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />
+  </head>
+  <body class="{% block body_class %}{% endblock %}">
+    {% if user.is_authenticated %}
+    <header class="topbar">
+      <div class="topbar__brand">Panel</div>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-ghost">Cerrar sesión</button>
+      </form>
+    </header>
+    {% endif %} {% block content %}{% endblock %}
+  </body>
+</html>
